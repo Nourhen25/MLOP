@@ -9,7 +9,8 @@ uploaded_file = st.file_uploader("Upload a numpy array of embeddings", type=["np
 
 if uploaded_file is not None:
     # Load the numpy array
-    embeddings = np.load(BytesIO(uploaded_file.read()))
+    # embeddings = np.load(BytesIO(uploaded_file.read()))
+    embeddings = np.random.rand(1, 100)
 
     # Display the shape of the embeddings
     st.write(f"Embeddings shape: {embeddings.shape}")
@@ -27,7 +28,7 @@ if uploaded_file is not None:
     if st.button('Submit'):
         # Placeholder for converting user input to embeddings
         # Replace this with actual model prediction logic
-        user_embedding = np.random.rand(1, embeddings.shape[1])
+        user_embedding = np.random.rand(1, 100])
 
         # Calculate cosine similarity
         similarities = cosine_similarity(user_embedding, embeddings)
