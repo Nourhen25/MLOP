@@ -1,4 +1,4 @@
 streamlit
-panads
+pandas
 numpy
 scikit-learn
