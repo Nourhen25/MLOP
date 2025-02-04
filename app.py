@@ -28,7 +28,7 @@ if uploaded_file is not None:
     if st.button('Submit'):
         # Placeholder for converting user input to embeddings
         # Replace this with actual model prediction logic
-        user_embedding = np.random.rand(1, 100])
+        user_embedding = np.random.rand(1, 100)
 
         # Calculate cosine similarity
         similarities = cosine_similarity(user_embedding, embeddings)
