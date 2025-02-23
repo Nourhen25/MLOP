@@ -15,6 +15,13 @@ except LookupError:
     nltk.download('stopwords')
     nltk.download('punkt')
     nltk.download('punkt_tab')
+# Load and preprocess the Reuters dataset
+try:
+    documents = [reuters.raw(fileid) for fileid in reuters.fileids()]
+except Exception as e:
+    st.error(f"Error loading Reuters corpus: {e}")
+    documents = []  # Ensuring an empty list is used if an error occurs
+
 
 # Load and preprocess the Reuters dataset
 documents = [reuters.raw(fileid) for fileid in reuters.fileids()]
