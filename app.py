@@ -1,15 +1,19 @@
 import streamlit as st
 import numpy as np
-import nltk
 from nltk.corpus import reuters, stopwords
 from nltk.tokenize import word_tokenize
 from gensim.models import Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
-
 # Download necessary NLTK data
-nltk.download('reuters')
+
+import nltk
+print(nltk.data.path)
+
 nltk.download('punkt')
+nltk.download('punkt_tab')
 nltk.download('stopwords')
+nltk.download('reuters')
+
 
 # Load and preprocess the Reuters dataset
 documents = [reuters.raw(fileid) for fileid in reuters.fileids()]
