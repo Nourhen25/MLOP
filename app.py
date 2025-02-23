@@ -7,14 +7,15 @@ from sklearn.metrics.pairwise import cosine_similarity
 import nltk
 import time
 
-# Download NLTK resources only if not already downloaded
-def download_reuters_with_retries():
+# Force re-download of necessary NLTK data
+def download_nltk_resources():
+    resources = ['reuters', 'stopwords', 'punkt', 'punkt_tab']
     retries = 3
     for _ in range(retries):
         try:
-            nltk.download('reuters')
-            nltk.download('stopwords')
-            nltk.download('punkt')
+            # Try to download necessary NLTK resources
+            for resource in resources:
+                nltk.download(resource)
             return True
         except Exception as e:
             st.error(f"Error downloading NLTK resources: {e}")
@@ -22,7 +23,7 @@ def download_reuters_with_retries():
     return False
 
 # Attempt to download the required data
-if not download_reuters_with_retries():
+if not download_nltk_resources():
     st.error("Failed to download necessary NLTK data after multiple attempts.")
 else:
     # Cache the corpus to avoid re-downloading on each run
@@ -71,4 +72,3 @@ else:
         for idx in top_indices:
             st.write(f"**Score:** {similarities[idx]:.4f}\n")
             st.write(documents[idx][:500] + '...')
-
