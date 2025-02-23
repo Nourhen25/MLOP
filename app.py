@@ -1,41 +1,49 @@
 import streamlit as st
 import numpy as np
+import nltk
+from nltk.corpus import reuters, stopwords
+from nltk.tokenize import word_tokenize
+from gensim.models import Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
-from io import BytesIO
 
-st.title('Embedding Similarity App')
+# Download necessary NLTK data
+nltk.download('reuters')
+nltk.download('punkt')
+nltk.download('stopwords')
 
-uploaded_file = st.file_uploader("Upload a numpy array of embeddings", type=["npy"])
+# Load and preprocess the Reuters dataset
+documents = [reuters.raw(fileid) for fileid in reuters.fileids()]
+stop_words = set(stopwords.words('english'))
 
-if uploaded_file is not None:
-    # Load the numpy array
-    # embeddings = np.load(BytesIO(uploaded_file.read()))
-    embeddings = np.random.rand(1, 100)
+def preprocess(text):
+    return [word.lower() for word in word_tokenize(text) if word.isalpha() and word.lower() not in stop_words]
 
-    # Display the shape of the embeddings
-    st.write(f"Embeddings shape: {embeddings.shape}")
+tokenized_docs = [preprocess(doc) for doc in documents]
 
-    # Define the list of models (for demonstration purposes)
-    models = ['Model A', 'Model B', 'Model C']
+# Train a Word2Vec model
+w2v_model = Word2Vec(sentences=tokenized_docs, vector_size=100, window=5, min_count=2, workers=4)
 
-    # Create a drop-down list for model selection
-    selected_model = st.selectbox('Select a model:', models)
+# Compute document vectors
+def document_vector(doc):
+    vectors = [w2v_model.wv[word] for word in doc if word in w2v_model.wv]
+    return np.mean(vectors, axis=0) if vectors else np.zeros(100)
 
-    # Create an input box for user text input
-    user_input = st.text_input('Enter your text:')
+doc_vectors = np.array([document_vector(doc) for doc in tokenized_docs])
 
-    # Create a submit button
-    if st.button('Submit'):
-        # Placeholder for converting user input to embeddings
-        # Replace this with actual model prediction logic
-        user_embedding = np.random.rand(1, 100)
+# Streamlit UI
+st.title('Semantic Search Engine')
+user_query = st.text_input('Enter your search query:')
 
-        # Calculate cosine similarity
-        similarities = cosine_similarity(user_embedding, embeddings)
-
-        # Get the top-k most similar indexes
-        top_k = 5
-        top_k_indexes = np.argsort(similarities[0])[-top_k:][::-1]
-
-        # Display the top-k most similar indexes
-        st.write('Top-k most similar indexes:', top_k_indexes)
+if st.button('Search') and user_query:
+    query_tokens = preprocess(user_query)
+    query_vector = document_vector(query_tokens).reshape(1, -1)
+    similarities = cosine_similarity(query_vector, doc_vectors)[0]
+    
+    # Get top-k most relevant documents
+    top_k = 5
+    top_indices = similarities.argsort()[-top_k:][::-1]
+    
+    st.write('Top relevant search results:')
+    for idx in top_indices:
+        st.write(f"**Score:** {similarities[idx]:.4f}\n")
+        st.write(documents[idx][:500] + '...')
