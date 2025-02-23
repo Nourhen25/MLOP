@@ -1,3 +1,11 @@
+import nltk
+
+# Download necessary NLTK resources
+nltk.download('reuters')
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('punkt_tab')
+
 import streamlit as st
 import numpy as np
 from nltk.corpus import reuters, stopwords
@@ -5,14 +13,6 @@ from nltk.tokenize import word_tokenize
 from gensim.models import Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
 # Download necessary NLTK data
-
-import nltk
-print(nltk.data.path)
-
-nltk.download('punkt')
-nltk.download('punkt_tab')
-nltk.download('stopwords')
-nltk.download('reuters')
 
 
 # Load and preprocess the Reuters dataset
