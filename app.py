@@ -6,6 +6,12 @@ nltk.download('stopwords')
 nltk.download('punkt')
 nltk.download('punkt_tab')
 
+# Download necessary NLTK resources, only if not already available
+try:
+    nltk.data.find('corpora/reuters')
+except LookupError:
+    nltk.download('reuters')
+
 import streamlit as st
 import numpy as np
 from nltk.corpus import reuters, stopwords
