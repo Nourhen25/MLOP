@@ -5,16 +5,15 @@ from nltk.tokenize import word_tokenize
 from gensim.models import Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
 # Download necessary NLTK data
-import nltk
 
-nltk.download('reuters')
-nltk.download('stopwords')
+import nltk
+print(nltk.data.path)
+
 nltk.download('punkt')
 nltk.download('punkt_tab')
-# Load and preprocess the Reuters dataset
-
-
+nltk.download('stopwords')
 nltk.download('reuters')
+
 
 # Load and preprocess the Reuters dataset
 documents = [reuters.raw(fileid) for fileid in reuters.fileids()]
