@@ -7,21 +7,14 @@ from sklearn.metrics.pairwise import cosine_similarity
 # Download necessary NLTK data
 import nltk
 
-# Download NLTK resources only if not already downloaded
-try:
-    nltk.data.find('corpora/reuters')
-except LookupError:
-    nltk.download('reuters')
-    nltk.download('stopwords')
-    nltk.download('punkt')
-    nltk.download('punkt_tab')
+nltk.download('reuters')
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('punkt_tab')
 # Load and preprocess the Reuters dataset
-try:
-    documents = [reuters.raw(fileid) for fileid in reuters.fileids()]
-except Exception as e:
-    st.error(f"Error loading Reuters corpus: {e}")
-    documents = []  # Ensuring an empty list is used if an error occurs
 
+
+nltk.download('reuters')
 
 # Load and preprocess the Reuters dataset
 documents = [reuters.raw(fileid) for fileid in reuters.fileids()]
